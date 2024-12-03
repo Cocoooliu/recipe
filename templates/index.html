@@ -4,39 +4,50 @@
 
 {% block body %}
 <main role="main">
-    <div class="jumbotron">
-        <div class="col-sm-8 mx-auto">
-            <h1>歡迎來到食譜網站</h1>
-            <p>這是一個食譜網站，你可以在這裡建立專屬於你的食譜，並與大家分享！</p>
+    <div class="jumbotron bg-light text-dark py-5">
+        <div class="col-sm-8 mx-auto text-center">
+            <h1 class="display-4">歡迎來到食譜網站</h1>
+            <p class="lead">這是一個專屬於你的食譜網站，分享創意與美味！</p>
             <p>
-                <a class="btn btn-primary" href="{{ url_for('index') }}" role="button">立即查看食譜列表</a>
+                <a class="btn btn-primary btn-lg mt-3" href="{{ url_for('index') }}" role="button">立即查看食譜列表</a>
             </p>
         </div>
     </div>
 </main>
 
-<div class="container mt-4">
-    <h1 class="mb-4 text-center">食譜列表</h1>
-    <a href="{{ url_for('add_recipe') }}" class="btn btn-success mb-4">新增食譜</a>
+<div class="container mt-5">
+    <h1 class="mb-4 text-center text-primary">食譜列表</h1>
+    <div class="d-flex justify-content-end">
+        <a href="{{ url_for('add_recipe') }}" class="btn btn-success mb-4">新增食譜</a>
+    </div>
 
-    <!-- 顯示食譜列表 -->
-    <div class="list-group">
-        {% for recipe in recipes %}
-            <div class="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                    <h5 class="mb-1">{{ recipe.title }}</h5>
-                    <p class="mb-1">作者: {{ recipe.author }}</p> <!-- 顯示作者 -->
-                    <p class="mb-1">{{ recipe.content[:100] }}...</p> <!-- 顯示前 100 個字元 -->
-                </div>
-                <div class="btn-group">
+ <!-- 顯示食譜列表 -->
+<div class="row">
+    {% for recipe in recipes %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card shadow-lg border-light rounded-lg">
+            <div class="card-body">
+                <h5 class="card-title text-truncate" style="font-size: 1.25rem; font-weight: bold;">{{ recipe.title }}</h5>
+                <h6 class="card-subtitle text-muted mb-2" style="font-size: 1rem;">作者: {{ recipe.author }}</h6>
+                <p class="card-text text-truncate" style="font-size: 1rem; color: #6c757d;">{{ recipe.content[:100] }}...</p>
+                <div class="d-flex justify-content-between mt-3">
                     <!-- 瀏覽食譜按鈕 -->
-                    <a href="{{ url_for('show_recipe', recipe_id=recipe.id) }}" class="btn btn-info mr-2">瀏覽食譜</a>
+                    <a href="{{ url_for('show_recipe', recipe_id=recipe.id) }}" class="btn btn-primary btn-sm rounded-pill" style="background-color: #007bff; border: none; font-weight: 600;">瀏覽</a>
                     <!-- 編輯食譜按鈕 -->
-                    <a href="{{ url_for('edit_recipe', recipe_id=recipe.id) }}" class="btn btn-warning">編輯食譜</a>
+                    <a href="{{ url_for('edit_recipe', recipe_id=recipe.id) }}" class="btn btn-warning btn-sm rounded-pill" style="background-color: #ffc107; border: none; font-weight: 600;">編輯</a>
                 </div>
             </div>
-        {% endfor %}
+        </div>
     </div>
+    {% endfor %}
 </div>
 
+
+
+    {% if not recipes %}
+    <div class="alert alert-info text-center" role="alert">
+        暫時沒有任何食譜，快來新增你的第一個食譜吧！
+    </div>
+    {% endif %}
+</div>
 {% endblock %}

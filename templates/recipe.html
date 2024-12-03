@@ -6,40 +6,131 @@
     <title>{{ recipe.title }}</title>
     
     <!-- 引入 Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-pzjw8f+ua7Kw1TIq0ZmR0VQkfi0cxA1sy2jkxMTq+0Xjjb0KPQdV8OV9Ifi91foF" crossorigin="anonymous">
     
     <!-- 自訂樣式 -->
     <style>
         body {
-            background-color: #f8f9fa;
+            background-color: #f9f9f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             padding-top: 50px;
+            color: #333;
         }
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
         }
+        .recipe-card {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #e0e0e0;
+        }
+        .recipe-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #343a40;
+            text-align: center; /* 標題居中 */
+            margin-bottom: 20px;
+        }
+        .recipe-subtitle {
+            font-size: 1.2rem;
+            color: #6c757d;
+            text-align: center; /* 作者信息居中 */
+            margin-bottom: 20px;
+        }
+        .recipe-content, .recipe-steps {
+            font-size: 1.1rem;
+            color: #495057;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        .ingredients-list {
+            list-style-type: none;
+            padding-left: 0;
+            margin-bottom: 20px;
+        }
+        .ingredients-list li {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            color: #5a6268;
+            padding-left: 1em;
+            position: relative;
+        }
+        .ingredients-list li::before {
+            content: "\2022"; /* 圓點符號 */
+            position: absolute;
+            left: 0;
+            font-size: 1.5rem;
+            color: #007bff;
+        }
         .btn-back {
-            margin-top: 30px;
             width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .btn-back:hover {
+            background-color: #218838;
+        }
+        .recipe-steps p {
+            margin-bottom: 15px;
+        }
+        .recipe-steps-title {
+            font-size: 1.5rem;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            color: #6c757d;
         }
     </style>
 </head>
 <body>
 
-    <div class="container text-center">
-        <h1 class="mb-4">{{ recipe.title }}</h1>
-        <p><strong>作者：</strong>{{ recipe.author }}</p>
-        <p><strong>內容：</strong>{{ recipe.content }}</p>
-        <h3>製作步驟：</h3>
-        <p>{{ recipe.steps }}</p>
+    <div class="container">
+        <div class="recipe-card">
+            <h1 class="recipe-title mb-4">{{ recipe.title }}</h1>
+            <p class="recipe-subtitle mb-3"><strong>作者：</strong>{{ recipe.author }}</p>
+            
+            <h3 class="recipe-steps-title mb-3">材料：</h3>
+            <div class="recipe-content">
+                {% for content in recipe.content.split('\n') %}
+                    <p>{{ content }}</p> <!-- 每個步驟換行顯示 -->
+                {% endfor %}
+            </div>
+            
+            <h3 class="recipe-steps-title mb-3">製作步驟：</h3>
+            <div class="recipe-steps">
+                {% for step in recipe.steps.split('\n') %}
+                    <p>{{ step }}</p> <!-- 每個步驟換行顯示 -->
+                {% endfor %}
+            </div>
+        </div>
         
         <!-- 返回食譜列表的按鈕 -->
-        <a href="{{ url_for('index') }}" class="btn btn-primary btn-back">返回食譜列表</a>
+        <a href="{{ url_for('index') }}" class="btn btn-back">返回食譜列表</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2024 食譜網站 | 設計 & 開發</p>
     </div>
 
     <!-- 引入 Bootstrap JS 和 Popper.js -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy32E4iCZpYJ9jNz1v3Zzjjt0j1F+qd9G4z9w/+p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.0/dist/umd/popper.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0ZmR0VQkfi0cxA1sy2jkxMTq+0Xjjb0KPQdV8OV9Ifi91foF" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-CTJc2QdsYj2f6v+OZxWibVnbYYf05i8QJmFiD7Qz5k01Y9XY7khOnW5OjCdmCpJq" crossorigin="anonymous"></script>
+
 </body>
 </html>
