@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -11,7 +12,7 @@
     <!-- 自訂樣式 -->
     <style>
         body {
-            background-color: #f9f9f9;
+            background-color: #f9f9f9;  /* 淺灰色背景，營造清新氛圍 */
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             padding-top: 50px;
             color: #333;
@@ -19,31 +20,62 @@
         .container {
             max-width: 900px;
             margin: 0 auto;
+            background-color: #ffffff; /* 保持白色背景 */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 輕微的陰影效果，讓容器浮起來 */
         }
         .recipe-card {
-            background-color: #ffffff;
+            background-color: #FFF7E1;  /* 淡蛋奶油黃背景 */
             border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12); /* 更柔和的陰影效果 */
             padding: 30px;
+            text-align: center;
             margin-bottom: 30px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid #e0e0e0; /* 淺灰色邊框，與背景顏色形成輕微對比 */
+            transition: all 0.3s ease-in-out; /* 加入過渡效果 */
         }
         .recipe-title {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #343a40;
-            text-align: center; /* 標題居中 */
-            margin-bottom: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 3rem;  /* 較為適中的字型大小 */
+            font-weight: 600;   /* 提高字重，讓標題更醒目但不過於粗糙 */
+            text-transform: uppercase; /* 大寫字母 */
+            color: #6F4F28;  /* 咖啡色 */
+            letter-spacing: 1.5px; /* 微調字母間距，使字形更清晰 */
+            line-height: 1.3; /* 行高略微增大，讓文字顯得更舒適 */
+            text-align: center;  /* 文字居中 */
+            margin-bottom: 10px;  /* 下方留白稍微縮小 */
+            padding: 8px 16px;  /* 更適中的內邊距，保持清新 */
+            background-color: #FFF0B3;  /* 淺奶油色背景，讓標題與頁面其他內容更為柔和 */
+            border-radius: 8px;  /* 較圓滑的邊角，增加親和力 */
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); /* 輕微的陰影效果，讓標題更立體 */
         }
         .recipe-subtitle {
             font-size: 1.2rem;
-            color: #6c757d;
-            text-align: center; /* 作者信息居中 */
-            margin-bottom: 20px;
+            color: #6c757d; /* 淺灰色 */
+            margin-bottom: 15; /* 删除底部间距 */
+            padding: 0 15px; /* 添加左右内边距 */
+            font-family: 'Comic Sans MS', 'Cursive', sans-serif; /* 可爱的字体 */
+            letter-spacing: 0.5px; /* 轻微增加字母间距，使字体看起来更清新 */
         }
+        
+        .d-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* 确保它们垂直居中对齐 */
+            margin-bottom: 15px; /* 适当的底部间距 */
+        }
+        .recipe-steps-title {
+            font-size: 1.5rem; /* 更大字体 */
+            color: #6F4F28; /* 咖啡色 */
+            font-weight: bold; /* 加粗字体 */
+            margin-bottom: 15px; /* 增加底部间距 */
+            text-align: left; /* 左对齐 */
+        }
+        
+        
         .recipe-content, .recipe-steps {
             font-size: 1.1rem;
-            color: #495057;
+            color: #495057;  /* 更柔和的灰色，避免過於突兀 */
             line-height: 1.7;
             margin-bottom: 20px;
         }
@@ -55,39 +87,29 @@
         .ingredients-list li {
             margin-bottom: 10px;
             font-size: 1.1rem;
-            color: #5a6268;
+            color: #5a6268;  /* 深灰色 */
             padding-left: 1em;
             position: relative;
         }
         .ingredients-list li::before {
-            content: "\2022"; /* 圓點符號 */
+            content: "\2022"; 
             position: absolute;
             left: 0;
             font-size: 1.5rem;
-            color: #007bff;
+            color: #FFB84D; /* 黃色圓點 */
         }
-        .btn-back {
-            width: 100%;
-            padding: 15px;
+        .difficulty {
             font-size: 1.2rem;
-            border-radius: 8px;
-            background-color: #28a745;
-            color: white;
-            border: none;
+            font-weight: bold;
+            color: #FFB84D; /* 黃色 */
             text-align: center;
-            text-decoration: none;
-            transition: background-color 0.3s;
+            margin-bottom: 20px;
         }
-        .btn-back:hover {
-            background-color: #218838;
-        }
-        .recipe-steps p {
-            margin-bottom: 15px;
-        }
-        .recipe-steps-title {
-            font-size: 1.5rem;
-            color: #007bff;
-            margin-bottom: 15px;
+        .recipe-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 20px;
         }
         .footer {
             text-align: center;
@@ -95,42 +117,116 @@
             font-size: 0.9rem;
             color: #6c757d;
         }
+        .custom-btn {
+            background-color: #F2D58B;
+            color: #6F4F28;
+            font-weight: bold;
+            border: none; /* 無邊框 */
+            text-decoration: none; /* 去除底线 */
+            padding: 10px 20px; /* 增加内边距，增加按钮的可点击区域 */
+            border-radius: 25px; /* 圆角效果 */
+            transition: all 0.3s ease; /* 过渡效果 */
+        }
+        
+        .custom-btn:hover {
+            background-color: #F6E3B4; /* 鼠标悬停时改变背景颜色 */
+            color: #6F4F28; /* 保持文字颜色不变 */
+            transform: scale(1.05); /* 稍微放大按钮 */
+        }
+        
     </style>
+    
 </head>
 <body>
 
     <div class="container">
         <div class="recipe-card">
             <h1 class="recipe-title mb-4">{{ recipe.title }}</h1>
-            <p class="recipe-subtitle mb-3"><strong>作者：</strong>{{ recipe.author }}</p>
-            
-            <h3 class="recipe-steps-title mb-3">材料：</h3>
+    
+        <!-- 使用 Flexbox 布局將作者和建立時間顯示在同一行 -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <p class="recipe-subtitle mb-0" style="margin-right: 20px;"><strong>作者：</strong>{{ recipe.author }}</p>
+            <p class="recipe-subtitle mb-0">
+                <strong>建立時間：</strong>
+                {% if recipe.created_at %}
+                    {{ recipe.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
+                {% else %}
+                    尚未設定
+                {% endif %}
+            </p>
+        </div>
+    
+            {% if recipe.image %}
+            <img src="{{ url_for('uploaded_file', filename=recipe.image) }}" alt="{{ recipe.title }}" class="img-fluid recipe-image">
+            {% endif %}
+    
+            <div class="difficulty">
+                <span class="star {{ 'filled' if recipe.difficulty|int >= 1 else '' }}" data-value="1">&#9733;</span>
+                <span class="star {{ 'filled' if recipe.difficulty|int >= 2 else '' }}" data-value="2">&#9733;</span>
+                <span class="star {{ 'filled' if recipe.difficulty|int >= 3 else '' }}" data-value="3">&#9733;</span>
+                <span class="star {{ 'filled' if recipe.difficulty|int >= 4 else '' }}" data-value="4">&#9733;</span>
+                <span class="star {{ 'filled' if recipe.difficulty|int >= 5 else '' }}" data-value="5">&#9733;</span>
+            </div>
+    
+            <h3 class="recipe-steps-title mb-3">介紹：</h3>
             <div class="recipe-content">
                 {% for content in recipe.content.split('\n') %}
-                    <p>{{ content }}</p> <!-- 每個步驟換行顯示 -->
+                    <p>{{ content }}</p>
                 {% endfor %}
             </div>
-            
+
+            <h3 class="recipe-steps-title mb-3">材料：</h3>
+            <div class="recipe-ingredient">
+                {% if recipe.ingredients %}
+                    <p>{{ recipe.ingredients }}</p>
+                {% else %}
+                    <p>目前尚無額外說明。</p>
+                {% endif %}
+            </div>
+    
             <h3 class="recipe-steps-title mb-3">製作步驟：</h3>
             <div class="recipe-steps">
                 {% for step in recipe.steps.split('\n') %}
-                    <p>{{ step }}</p> <!-- 每個步驟換行顯示 -->
+                    <p>{{ step }}</p>
                 {% endfor %}
             </div>
+    
+            
+            
+    
         </div>
-        
-        <!-- 返回食譜列表的按鈕 -->
-        <a href="{{ url_for('index') }}" class="btn btn-back">返回食譜列表</a>
-    </div>
-
-    <div class="footer">
-        <p>© 2024 食譜網站 | 設計 & 開發</p>
-    </div>
-
-    <!-- 引入 Bootstrap JS 和 Popper.js -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy32E4iCZpYJ9jNz1v3Zzjjt0j1F+qd9G4z9w/+p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.0/dist/umd/popper.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0ZmR0VQkfi0cxA1sy2jkxMTq+0Xjjb0KPQdV8OV9Ifi91foF" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-CTJc2QdsYj2f6v+OZxWibVnbYYf05i8QJmFiD7Qz5k01Y9XY7khOnW5OjCdmCpJq" crossorigin="anonymous"></script>
-
-</body>
-</html>
+    
+        <div class="d-flex justify-content-between mt-3">
+            <a href="{{ request.referrer or url_for('all_recipes') }}" class="btn btn-sm  custom-btn">返回上一頁</a>
+            <form action="{{ url_for('delete_recipe', recipe_id=recipe.id) }}" method="POST">
+                <button type="submit" class="custom-btn">刪除食譜</button>
+            </form>
+                  
+        </div>
+    
+    <script>
+        // 星星點擊事件
+        const stars = document.querySelectorAll('.star');
+        const difficultyInput = document.getElementById('difficulty');
+    
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                const value = star.getAttribute('data-value');
+                // 更新填滿的星星
+                updateStars(value);
+                // 更新 hidden input 的值
+                difficultyInput.value = value;
+            });
+        });
+    
+        function updateStars(value) {
+            stars.forEach(star => {
+                if (star.getAttribute('data-value') <= value) {
+                    star.classList.add('filled');
+                } else {
+                    star.classList.remove('filled');
+                }
+            });
+        }
+    </script>
+ 

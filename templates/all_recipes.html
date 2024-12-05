@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>所有食譜</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        h1 {
+            font-size: 3rem; /* 增大字體以突出顯示 */
+            margin-bottom: 40px; /* 增加底部邊距，創造更多空間 */
+            text-align: center;
+            color: #6f4f28; /* 咖啡色文字 */
+            background: linear-gradient(135deg, #6f4f28, #8b5e3c, #3e2723); /* 咖啡色漸變背景 */
+            -webkit-background-clip: text;
+            background-clip: text;
+            font-weight: bold;
+            text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1); /* 強烈的文字陰影增強深度 */
+            padding: 12px 0; /* 增加內邊距讓文字看起來不擁擠 */
+            border-bottom: 3px solid #8b5e3c; /* 更柔和的邊框顏色，與背景搭配 */
+            letter-spacing: 1px; /* 增加字母間距，提升可讀性 */
+            transition: all 0.3s ease-in-out; /* 平滑的過渡效果 */
+        }
+        
+        h1:hover {
+            color: #3e2723; /* 滑鼠懸停時改變文字顏色為深咖啡色 */
+            text-shadow: 4px 4px 15px rgba(0, 0, 0, 0.5); /* 懸停時增加陰影效果，增強視覺衝擊 */
+            transform: scale(1.05); /* 增加輕微縮放效果 */
+        }
+        
+
+  
+
+        .recipe-card {
+            background-color: #fff;
+            border: 1px solid #D7B39D;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 15px;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-5px); /* Slight lift effect on hover */
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+        }
+
+        .recipe-card img {
+            border-radius: 8px;
+            margin-bottom: 10px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .recipe-title {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: #6F4F28;
+            margin-bottom: 10px;
+        }
+
+        .recipe-category,
+        .recipe-difficulty {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+
+        .recipe-author {
+            font-size: 1.1rem;
+            color: #D7B39D;
+            font-weight: bold;
+        }
+
+        .btn {
+            background-color: #7B3F00;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 25px;
+            padding: 8px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #C4A484;
+        }
+
+        .no-recipes {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #C4A484;
+            margin-top: 50px;
+        }
+
+        .pagination {
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .pagination .page-item {
+            margin: 0 5px;
+        }
+
+        .pagination a {
+            color: #C4A484;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .pagination a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>所有食譜</h1>
+    
+    <div class="text-end mb-3">
+        <a href="{{ url_for('index') }}" class="btn">回首頁</a>
+    </div>
+
+    <div class="row">
+        {% for recipe in recipes %}
+            <div class="col-md-4 mb-4">
+                <div class="recipe-card">
+                    <a href="{{ url_for('show_recipe', recipe_id=recipe.id) }}">
+                        <h2 class="recipe-title">{{ recipe.title }}</h2>
+                    </a>
+                    <p class="recipe-author">作者: {{ recipe.author }}</p>
+                    <p class="recipe-category">類別: {{ recipe.category }}</p>
+                    <p class="recipe-difficulty">難度: {{ recipe.difficulty }} 星級</p>
+                    
+                    {% if recipe.image %}
+                        <img src="{{ url_for('uploaded_file', filename=recipe.image) }}" alt="{{ recipe.title }}">
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12">
+                <p class="no-recipes">目前沒有食譜。</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- 分頁按鈕 -->
+    <div class="pagination d-flex justify-content-center mt-4">
+        <!-- 上一頁按鈕 -->
+        {% if pagination.has_prev %}
+            <a href="{{ url_for('all_recipes', page=pagination.prev_num) }}" class="btn btn-outline-primary btn-sm mx-2">
+                <i class="bi bi-arrow-left-circle"></i> 上一頁
+            </a>
+        {% endif %}
+
+        <!-- 當前頁碼 -->
+        <span class="d-flex align-items-center">
+            頁碼: {{ pagination.page }} / {{ pagination.pages }}
+        </span>
+
+        <!-- 下一頁按鈕 -->
+        {% if pagination.has_next %}
+            <a href="{{ url_for('all_recipes', page=pagination.next_num) }}" class="btn btn-outline-primary btn-sm mx-2">
+                下一頁 <i class="bi bi-arrow-right-circle"></i>
+            </a>
+        {% endif %}
+    </div>
+
+</div>
+
+</body>
+</html>

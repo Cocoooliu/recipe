@@ -21,15 +21,15 @@
         }
         h1 {
             text-align: center;
-            color: #333;
+            color: #6f4f28;
         }
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: #555;
+            color: #6f4f28;
         }
-        input[type="text"], textarea {
+        input[type="text"], textarea, select, input[type="file"] {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
@@ -40,21 +40,46 @@
         textarea {
             height: 150px;
         }
-        button {
-            background-color: #4CAF50;
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .button-group a, .button-group button {
+            display: inline-block;
+            background-color: #F2D58B;
             color: white;
             padding: 10px 15px;
             border: none;
             border-radius: 4px;
             font-size: 16px;
+            text-align: center;
             cursor: pointer;
-            width: 100%;
+            text-decoration: none; /* 移除底線 */
+            width: 48%; /* 確保按鈕等寬 */
+            box-sizing: border-box;
         }
-        button:hover {
-            background-color: #45a049;
+        .button-group a:hover, .button-group button:hover {
+            background-color: #FFF9C4;
         }
-        .form-group {
-            margin-bottom: 20px;
+
+        /* 星星樣式 */
+        .stars {
+            display: flex;
+            direction: row;
+            justify-content: center;
+        }
+        .star {
+            font-size: 30px;
+            cursor: pointer;
+            color: #ccc;
+            transition: color 0.2s;
+        }
+        .star.filled {
+            color: #FFD700; /* 塗滿顏色 */
         }
     </style>
 </head>
@@ -62,7 +87,7 @@
 
     <div class="container">
         <h1>新增食譜</h1>
-        <form method="POST" action="{{ url_for('add_recipe') }}">
+        <form method="POST" action="{{ url_for('add_recipe') }}" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="title">食譜名稱：</label>
                 <input type="text" id="title" name="title" required>
@@ -72,16 +97,70 @@
                 <input type="text" id="author" name="author" required>
             </div>
             <div class="form-group">
+                <label for="category">食譜類別</label>
+                <select name="category" id="category" class="form-control">
+                    <option value="蛋糕">蛋糕</option>
+                    <option value="麵包">麵包</option>
+                    <option value="餅乾">餅乾</option>
+                    <option value="其他">其他</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
                 <label for="content">內容：</label>
                 <textarea id="content" name="content" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="ingredients">材料：</label>
+                <textarea id="ingredients" name="ingredients" required></textarea>
             </div>
             <div class="form-group">
                 <label for="steps">步驟：</label>
                 <textarea id="steps" name="steps" required></textarea>
             </div>
-            <button type="submit">新增食譜</button>
+            <div class="form-group">
+                <label for="image">圖片：</label>
+                <input type="file" id="image" name="image" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label for="difficulty">難度星級：</label>
+                <div class="stars" id="stars">
+                    <span class="star" data-value="1">★</span>
+                    <span class="star" data-value="2">★</span>
+                    <span class="star" data-value="3">★</span>
+                    <span class="star" data-value="4">★</span>
+                    <span class="star" data-value="5">★</span>
+                </div>
+                <input type="hidden" name="difficulty" id="difficulty" value="0">
+            </div>
+            <input type="hidden" name="created_at" id="created_at" value="">
+
+            <div class="button-group">
+                <button type="submit">新增食譜</button>
+                <a href="{{ request.referrer or url_for('all_recipes') }}">返回上一頁</a>
+            </div>
         </form>
     </div>
 
+    <script>
+        const stars = document.querySelectorAll('.star');
+        const difficultyInput = document.getElementById('difficulty');
+
+        stars.forEach((star, index) => {
+            star.addEventListener('click', () => {
+                const rating = index + 1;
+                difficultyInput.value = rating;
+
+                // 填滿對應數量的星星
+                stars.forEach((s, i) => {
+                    if (i < rating) {
+                        s.classList.add('filled');
+                    } else {
+                        s.classList.remove('filled');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

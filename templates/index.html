@@ -4,50 +4,166 @@
 
 {% block body %}
 <main role="main">
-    <div class="jumbotron bg-light text-dark py-5">
+    <div class="jumbotron bg-light text-dark py-5 rounded-lg shadow-lg">
         <div class="col-sm-8 mx-auto text-center">
-            <h1 class="display-4">歡迎來到食譜網站</h1>
-            <p class="lead">這是一個專屬於你的食譜網站，分享創意與美味！</p>
+            <h1 class="display-4 font-weight-bold text-center" style="color:  #855959; text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);">
+                歡迎來到食譜網站
+            </h1>
+        
+            
+                        <p class="lead text-muted">這是一個專屬於你的食譜網站，分享創意與美味！</p>
             <p>
-                <a class="btn btn-primary btn-lg mt-3" href="{{ url_for('index') }}" role="button">立即查看食譜列表</a>
+                <a class="btn  btn-lg mt-3 px-4" href="{{ url_for('index') }}" role="button" style="border-radius: 30px; background-color: #FFE082;color=#855959;">查看食譜</a>
+                <a class="btn  btn-lg mt-3 px-4" href="{{ url_for('add_recipe') }}" role="button" style="border-radius: 30px; background-color: #FBC490;color=#855959;">新增食譜</a>
             </p>
         </div>
     </div>
 </main>
 
 <div class="container mt-5">
-    <h1 class="mb-4 text-center text-primary">食譜列表</h1>
-    <div class="d-flex justify-content-end">
-        <a href="{{ url_for('add_recipe') }}" class="btn btn-success mb-4">新增食譜</a>
-    </div>
-
- <!-- 顯示食譜列表 -->
-<div class="row">
-    {% for recipe in recipes %}
-    <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card shadow-lg border-light rounded-lg">
-            <div class="card-body">
-                <h5 class="card-title text-truncate" style="font-size: 1.25rem; font-weight: bold;">{{ recipe.title }}</h5>
-                <h6 class="card-subtitle text-muted mb-2" style="font-size: 1rem;">作者: {{ recipe.author }}</h6>
-                <p class="card-text text-truncate" style="font-size: 1rem; color: #6c757d;">{{ recipe.content[:100] }}...</p>
-                <div class="d-flex justify-content-between mt-3">
-                    <!-- 瀏覽食譜按鈕 -->
-                    <a href="{{ url_for('show_recipe', recipe_id=recipe.id) }}" class="btn btn-primary btn-sm rounded-pill" style="background-color: #007bff; border: none; font-weight: 600;">瀏覽</a>
-                    <!-- 編輯食譜按鈕 -->
-                    <a href="{{ url_for('edit_recipe', recipe_id=recipe.id) }}" class="btn btn-warning btn-sm rounded-pill" style="background-color: #ffc107; border: none; font-weight: 600;">編輯</a>
+    <h1 class="mb-4 text-center font-weight-bold" style="color: #855959; font-size: 40px; letter-spacing: 1px; text-transform: capitalize;">
+        食譜列表
+    </h1>
+    
+    
+    
+    
+    <!-- 顯示食譜分類 -->
+    <div class="row">
+        
+        <!-- 蛋糕類 -->
+        <div class="col-12 mb-4" id="cake">
+            <div class="card shadow border-0 rounded-lg">
+                <div class="card-header text-center" style="background: #f7d6e0; color: #6d4c4c; border: none;">
+                    <h2 class="font-weight-bold" style="font-size: 1.75rem;">蛋糕</h2>
+                </div>
+                <div class="card-body" style="background: #fffdfd; border-top: 1px solid #f4c7d6;">
+                    <div class="row">
+                        {% for recipe in recipes if recipe.category == '蛋糕' %}
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card shadow-sm border-light rounded-lg h-100" style="background: #fafafa; border: 1px solid #f3e0e5;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-truncate" style="font-size: 1.2rem; font-weight: bold; color: #5b3c3c;">{{ recipe.title }}</h5>
+                                    <h6 class="card-subtitle mb-2" style="font-size: 0.9rem; color: #7e5a5a;">作者: {{ recipe.author }}</h6>
+                                    <p class="card-text text-truncate" style="font-size: 0.9rem; color: #9c8c8c;">{{ recipe.content[:100] }}...</p>
+                                    <div class="d-flex justify-content-between mt-3">
+                                        <a href="{{ url_for('show_recipe', recipe_id=recipe.id) }}" class="btn btn-sm rounded-pill" style="background: #f4c7d6; color: #5b3c3c; font-weight: bold;">瀏覽</a>
+                                        <a href="{{ url_for('edit_recipe', recipe_id=recipe.id) }}" class="btn btn-sm rounded-pill" style="background: #f7e4ea; color: #5b3c3c; font-weight: bold;">編輯</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
+        
+
+        <!-- 餅乾類 -->
+        <div class="col-12 mb-4" id="cookie">
+            <div class="card shadow border-0 rounded-lg">
+                <div class="card-header text-center" style="background: #a3c9a8; color: #4b6357; border: none;">
+                    <h2 class="font-weight-bold" style="font-size: 1.75rem;">餅乾</h2>
+                </div>
+                
+                <div class="card-body" style="background: #f5f8f4; border-top: 1px solid #f4c7d6;">
+                    <div class="row">
+                        {% for recipe in recipes if recipe.category == '餅乾' %}
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card shadow-sm border-light rounded-lg h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title text-truncate" style="font-size: 1.2rem; font-weight: bold; color: #4b6357;">{{ recipe.title }}</h5>
+                                    <h6 class="card-subtitle mb-2" style="font-size: 0.9rem; color: #7e5a5a;">作者: {{ recipe.author }}</h6>
+                                    <p class="card-text text-truncate" style="font-size: 0.9rem; color: #9c8c8c;">{{ recipe.content[:100] }}...</p>
+                                    <div class="d-flex justify-content-between mt-3">
+                                        <a href="{{ url_for('show_recipe', recipe_id=recipe.id) }}" class="btn btn-sm rounded-pill" style="background: #c2e0c6; color: #4b6357; font-weight: bold;">瀏覽</a>
+                                        <a href="{{ url_for('edit_recipe', recipe_id=recipe.id) }}" class="btn btn-sm rounded-pill" style="background: #d8f3dc; color: #4b6357; font-weight: bold;">編輯</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 麵包類 -->
+        <div class="col-12 mb-4" id="bread">
+            <div class="card shadow border-0 rounded-lg">
+                <div class="card-header text-center" style="background: #a4b3c1; color: #526373; border: none;">
+                    <h2 class="font-weight-bold" style="font-size: 1.75rem;">麵包</h2>
+                </div>
+                
+                <div class="card-body" style="background: #f7f9fc; border-top: 1px solid #f4c7d6;">
+                    <div class="row">
+                        {% for recipe in recipes if recipe.category == '麵包' %}
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card shadow-sm border-light rounded-lg h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title text-truncate" style="font-size: 1.2rem; font-weight: bold; color: #4b6357;">{{ recipe.title }}</h5>
+                                    <h6 class="card-subtitle mb-2" style="font-size: 0.9rem; color: #7e5a5a;">作者: {{ recipe.author }}</h6>
+                                    <p class="card-text text-truncate" style="font-size: 0.9rem; color: #9c8c8c;">{{ recipe.content[:100] }}...</p>
+                                    <div class="d-flex justify-content-between mt-3">
+                                        <a href="{{ url_for('show_recipe', recipe_id=recipe.id) }}" class="btn btn-sm rounded-pill" style="background: #b0c7d4; color: #526373; font-weight: bold;">瀏覽</a>
+                                        <a href="{{ url_for('edit_recipe', recipe_id=recipe.id) }}" class="btn btn-sm rounded-pill" style="background: #d6e3ed; color: #526373; font-weight: bold;">編輯</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 其他類 -->
+        <div class="col-12 mb-4" id="other">
+            <div class="card shadow border-0 rounded-lg">
+                <div class="card-header text-center" style="background: #f9caca; color: #855959; border: none;">
+                    <h2 class="font-weight-bold" style="font-size: 1.75rem;">其他</h2>
+                </div>
+                
+                <div class="card-body" style="background: ##fffaf5; border-top: 1px solid #f4c7d6;">
+                    <div class="row">
+                        {% for recipe in recipes if recipe.category == '其他' %}
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card shadow-sm border-light rounded-lg h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title text-truncate" style="font-size: 1.2rem; font-weight: bold; color: #4b6357;">{{ recipe.title }}</h5>
+                                    <h6 class="card-subtitle mb-2" style="font-size: 0.9rem; color: #7e5a5a;">作者: {{ recipe.author }}</h6>
+                                    <p class="card-text text-truncate" style="font-size: 0.9rem; color: #9c8c8c;">{{ recipe.content[:100] }}...</p>
+                                    <div class="d-flex justify-content-between mt-3">
+                                        <a href="{{ url_for('show_recipe', recipe_id=recipe.id) }}" class="btn btn-sm rounded-pill" style="background: #f5d1d1; color: #855959; font-weight: bold;">瀏覽</a>
+                                        <a href="{{ url_for('edit_recipe', recipe_id=recipe.id) }}" class="btn btn-sm rounded-pill" style="background: #ffe4e4; color: #855959; font-weight: bold;">編輯</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
-    {% endfor %}
-</div>
-
-
 
     {% if not recipes %}
-    <div class="alert alert-info text-center" role="alert">
+    <div class="alert alert-info text-center" role="alert" style="font-size: 1.2rem; background-color: #e9f7fd; color: #1e90ff;">
         暫時沒有任何食譜，快來新增你的第一個食譜吧！
     </div>
     {% endif %}
 </div>
+
 {% endblock %}
+<style>
+    a.btn:hover {
+        background-color: #5A9CD6; /* 查看食譜：懸停變深 */
+        box-shadow: 0 5px 8px rgba(0, 0, 0, 0.15);
+    }
+    a.btn:nth-child(2):hover {
+        background-color: #6BB173; /* 新增食譜：懸停變深 */
+        box-shadow: 0 5px 8px rgba(0, 0, 0, 0.15);
+    }
+</style>

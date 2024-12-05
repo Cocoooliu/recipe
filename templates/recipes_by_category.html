@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ category_name }} 食譜</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: white; /* 淡黃色背景 */
+            margin: 0;
+            padding: 0;
+            color: #6f4f28; /* 咖啡色文字 */
+        }
+        header {
+            background-color: #FFF7D6;
+            color: #6f4f28; /* 咖啡色文字 */
+            text-align: center;
+            padding: 50px 0;  /* 提高header的高度 */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 2.8em;  /* 增大標題字體 */
+            margin: 0;
+            font-weight: bold;
+            color: #6f4f28; /* 咖啡色標題 */
+        }
+        nav {
+            background-color: #6f4f28; /* 咖啡色導航條 */
+            overflow: hidden;
+        }
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        nav ul li {
+            display: inline-block;
+        }
+        nav ul li a {
+            display: block;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            font-size: 1.1em;
+        }
+        nav ul li a:hover {
+            background-color: #4CAF50; /* 當懸停時變為綠色 */
+        }
+        .container {
+            width: 85%;
+            margin: 40px auto;
+        }
+        .recipe-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .recipe-card {
+            display: flex;
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+            display: flex;
+
+        }
+        .recipe-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        .recipe-card .text-content {
+            flex: 1;
+        }
+        .recipe-card h2 {
+            margin-top: 0;
+            font-size: 1.8em;
+            color: #6f4f28; /* 咖啡色標題 */
+        }
+        .recipe-card p {
+            color: #777;
+            margin: 10px 0;
+        }
+        .recipe-card a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color:#FFB300;  /* 咖啡色背景 */
+            color: white;  /* 白色文字 */
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            text-align: center;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        
+        .recipe-card a:hover {
+            background-color: #5C3C1D;  /* 懸停時較深的咖啡色 */
+            transform: translateY(-3px);
+        }
+        
+        .recipe-card img {
+            width: 200px; /* 固定圖片寬度 */
+            height: auto;
+            border-radius: 10px;
+            margin-left: 20px; /* 讓圖片有一點間距 */
+            max-width: 100%;  /* 限制圖片的最大寬度不超過容器 */
+            object-fit: cover; /* 讓圖片填充容器，但不會失真 */
+        }
+
+        .no-recipes {
+            text-align: center;
+            font-size: 1.3em;
+            color: #6f4f28; /* 咖啡色提示文字 */
+            padding: 30px;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        .pagination a {
+            margin: 0 15px;
+            padding: 12px 25px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            font-size: 1.1em;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .pagination a:hover {
+            background-color: #45a049;
+            transform: translateY(-3px);
+        }
+        .pagination span {
+            font-size: 1.2em;
+            color: #333;
+            margin: 0 15px;
+        }
+        /* 回首頁按鈕 - 右上角，並讓它稍微往下 */
+        .btn-back-home {
+            position: absolute;
+            top: 70px;  /* 增加上方距離 */
+            right: 20px;
+            padding: 12px 25px;
+            background-color: #7B3F00;
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;  /* 圓角設置 */
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .btn-back-home:hover {
+            background-color:#C4A484;
+            transform: translateY(-3px);
+        }
+        
+    </style>
+</head>
+<body>
+    <header>
+        <h1>{{ category_name }} 食譜</h1>
+    </header>
+
+    <!-- 回首頁按鈕 -->
+    <a href="{{ url_for('index') }}" class="btn-back-home">回首頁</a>
+
+    <div class="container">
+        {% if recipes %}
+            <div class="recipe-list">
+                {% for recipe in recipes %}
+                    <div class="recipe-card">
+                        <div class="text-content">
+                            <h2>{{ recipe.title }}</h2>
+                            <p>作者: {{ recipe.author }}</p>
+                            <p>難度: {{ recipe.difficulty }}</p>
+                            <p>內容: {{ recipe.content }}</p>
+                            <a href="{{ url_for('show_recipe', recipe_id=recipe.id) }}">查看詳細</a>
+                        </div>
+                        {% if recipe.image %}
+                            <img src="{{ url_for('uploaded_file', filename=recipe.image) }}" alt="{{ recipe.title }}">
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- 分頁按鈕 -->
+            <div class="pagination">
+                {% if pagination.has_prev %}
+                    <a href="{{ url_for('category_recipes', category_name=category_name, page=pagination.prev_num) }}">上一頁</a>
+                {% endif %}
+                <span>頁碼: {{ pagination.page }} / {{ pagination.pages }}</span>
+                {% if pagination.has_next %}
+                    <a href="{{ url_for('category_recipes', category_name=category_name, page=pagination.next_num) }}">下一頁</a>
+                {% endif %}
+            </div>
+
+        {% else %}
+            <p class="no-recipes">目前沒有任何食譜。</p>
+        {% endif %}
+    </div>
+</body>
+</html>

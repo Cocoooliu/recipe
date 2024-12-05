@@ -1,51 +1,139 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>編輯食譜</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+{% extends "base.html" %}
 
-<div class="container mt-4">
-    <h1 class="text-center mb-4">編輯食譜: {{ recipe.title }}</h1>
-    
-    <!-- 編輯食譜表單 -->
-    <form method="POST" class="mb-4">
-        <div class="mb-3">
-            <label for="title" class="form-label">食譜名稱</label>
-            <input type="text" class="form-control" name="title" id="title" value="{{ recipe.title }}" required>
-        </div>
+{% block title %}編輯食譜{% endblock %}
 
-        <div class="mb-3">
-            <label for="author" class="form-label">作者</label>
-            <input type="text" class="form-control" name="author" id="author" value="{{ recipe.author }}" required>
-        </div>
+{% block body %}
 
-        <div class="mb-3">
-            <label for="content" class="form-label">食譜內容</label>
-            <textarea class="form-control" name="content" id="content" rows="4" required>{{ recipe.content }}</textarea>
-        </div>
+<main role="main">
+    <div class="container mt-5">
+        
+        <h1 class="mb-4 text-center font-weight-bold" style="color: #855959; font-size: 40px; letter-spacing: 1px; text-transform: capitalize;">
+            編輯食譜
+        </h1>
+        <form method="POST" enctype="multipart/form-data">
+            
+            <!-- 食譜名稱 -->
+            <div class="form-group">
+                <label for="title" class="h5 font-weight-bold" style="color: #855959; font-size: 20px; letter-spacing: 1px; text-transform: capitalize;">食譜名稱</label>
+                <input type="text" class="form-control custom-input" id="title" name="title" value="{{ recipe.title }}" required>
+            </div>
 
-        <div class="mb-3">
-            <label for="steps" class="form-label">製作步驟</label>
-            <textarea class="form-control" name="steps" id="steps" rows="4" required>{{ recipe.steps }}</textarea>
-        </div>
+            <!-- 作者 -->
+            <div class="form-group">
+                <label for="author" class="h5 font-weight-bold" style="color: #855959; font-size: 20px; letter-spacing: 1px; text-transform: capitalize;">作者</label>
+                <input type="text" class="form-control custom-input" id="author" name="author" value="{{ recipe.author }}" required>
+            </div>
 
-        <button type="submit" class="btn btn-primary">儲存更改</button>
-    </form>
+            <!-- 內容 -->
+            <div class="form-group">
+                <label for="content" class="h5 font-weight-bold" style="color: #855959; font-size: 20px; letter-spacing: 1px; text-transform: capitalize;">內容</label>
+                <textarea class="form-control custom-input" id="content" name="content" rows="3" required>{{ recipe.content }}</textarea>
+            </div>
 
-    <!-- 刪除食譜按鈕 -->
-    <form action="{{ url_for('delete_recipe', recipe_id=recipe.id) }}" method="POST" class="mt-3">
-        <button type="submit" class="btn btn-danger" onclick="return confirm('確定要刪除這個食譜嗎？')">刪除食譜</button>
-    </form>
+            <!-- 步驟 -->
+            <div class="form-group">
+                <label for="steps" class="h5 font-weight-bold" style="color: #855959; font-size: 20px; letter-spacing: 1px; text-transform: capitalize;" >步驟</label>
+                <textarea class="form-control custom-input" id="steps" name="steps" rows="3" required>{{ recipe.steps }}</textarea>
+            </div>
 
-    <a href="{{ url_for('index') }}" class="btn btn-secondary mt-3">返回食譜列表</a>
-</div>
+            <!-- 難易度 -->
+            <div class="form-group">
+                <label for="difficulty" class="h5 font-weight-bold" style="color: #855959; font-size: 20px; letter-spacing: 1px; text-transform: capitalize;">難易度</label>
+                <input type="number" class="form-control custom-input" id="difficulty" name="difficulty" value="{{ recipe.difficulty }}" min="1" max="5" required>
+            </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+            <!-- 食譜類別 -->
+            <div class="form-group">
+                <label for="category" class="h5 font-weight-bold" style="color: #855959; font-size: 20px; letter-spacing: 1px; text-transform: capitalize;">食譜類別</label>
+                <select name="category" id="category" class="form-control custom-select">
+                    <option value="蛋糕" {% if recipe.category == '蛋糕' %}selected{% endif %}>蛋糕</option>
+                    <option value="麵包" {% if recipe.category == '麵包' %}selected{% endif %}>麵包</option>
+                    <option value="餅乾" {% if recipe.category == '餅乾' %}selected{% endif %}>餅乾</option>
+                    <option value="其他" {% if recipe.category == '其他' %}selected{% endif %}>其他</option>
+                </select>
+                <small class="form-text text-muted">請選擇食譜的類別</small>
+            </div>
 
-</body>
-</html>
+            <!-- 圖片 -->
+            <div class="form-group">
+                <label for="image" class="h5 font-weight-bold" style="color: #855959; font-size: 20px; letter-spacing: 1px; text-transform: capitalize;">圖片 (可選)</label>
+                <input type="file" class="form-control custom-input" id="image" name="image">
+            </div>
+            
+            <!-- 顯示當前圖片 -->
+            {% if recipe.image %}
+            <div class="form-group">
+                <label class="h5 font-weight-bold" style="color: #855959; font-size: 20px; letter-spacing: 1px; text-transform: capitalize;">當前圖片:</label><br>
+                <img src="{{ url_for('uploaded_file', filename=recipe.image) }}" alt="{{ recipe.title }}" class="img-fluid recipe-image" style="max-width: 200px;">
+            </div>
+            {% endif %}
+
+            <!-- 保存按鈕 -->
+            <div class="d-flex justify-content-between mb-4">
+                <button type="submit" class="btn custom-btn">保存更改</button>
+                <a href="{{ request.referrer or url_for('all_recipes') }}" class="btn btn-sm rounded-pill custom-back-btn">返回上一頁</a>
+            </div>
+        </form>
+    </div>
+</main>
+<!-- 內嵌 CSS -->
+<style>
+    /* 自定义输入框样式 */
+.custom-input {
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+/* 输入框聚焦效果 */
+.custom-input:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+}
+
+/* 自定义按钮样式 */
+.custom-btn {
+    background-color: #FFB300;
+    color: white;
+    font-weight: bold;
+    padding: 12px 30px;
+    border-radius: 50px;
+    border: none;
+    transition: all 0.3s ease;
+    width: 45%; /* 使按钮占据45%的宽度，留出空间给返回按钮 */
+}
+
+/* 自定义按钮鼠标悬停效果 */
+.custom-btn:hover {
+    background-color: #F6E3B4;
+    transform: scale(1.05);
+}
+
+/* 返回按钮样式 */
+.custom-back-btn {
+    background-color: #F2D58B;
+    color: white;
+    font-weight: bold;
+    padding: 12px 30px;
+    border-radius: 50px;
+    border: none;
+    transition: all 0.3s ease;
+    width: 45%; /* 使按钮占据45%的宽度，和保存按钮对齐 */
+}
+
+/* 返回按钮鼠标悬停效果 */
+.custom-back-btn:hover {
+    background-color: #F6E3B4;
+    transform: scale(1.05);
+}
+
+/* 控制按钮在一行内对齐 */
+.d-flex {
+    display: flex;
+    justify-content: space-between; /* 使按钮水平分布 */
+}
+
+</style>
+{% endblock %}
